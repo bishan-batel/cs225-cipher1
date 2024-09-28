@@ -18,7 +18,7 @@ void print_bit(char v, int pos) {
 }
 
 /* may be useful for debugging */
-void print_bits(const char *buffer, int start_pos, int how_many) {
+void print_bits(char *buffer, int start_pos, int how_many) {
   int i, j;
   printf("Bits: ");
   for (i = 0; i < how_many;) { /* for each char */
