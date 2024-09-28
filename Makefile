@@ -1,7 +1,6 @@
 PRG=gnu.exe
 GCC=gcc
-# GCCFLAGS=-O2 -Wall -Wextra -ansi -pedantic 
-GCCFLAGS=-O2 -Wall -Wextra -pedantic 
+GCCFLAGS=-O2 -Wall -Wextra -ansi -pedantic 
 MSC=cl
 MSCFLAGS=/EHa /W4 /Za /Zc:forScope /nologo /D_CRT_SECURE_NO_DEPRECATE /D"_SECURE_SCL 0" /O2i /GL
 

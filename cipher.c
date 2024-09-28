@@ -72,17 +72,17 @@ bool get_bit(const byte b, const size_t bit_index) { return (b >> bit_index) & 0
  * @param c Bit value to set
  */
 void set_bit(byte *output, const size_t bit_position, const bool c) {
-  // get the byte index that contains the specified bit
+  /* get the byte index that contains the specified bit*/
   const size_t byte_index = bit_position / 8;
   const size_t bit_index = bit_position - byte_index * 8;
 
-  // mask out the bit we are going to write to
+  /* mask out the bit we are going to write to*/
   const byte masked_value = output[byte_index] & ~(1 << bit_index);
 
-  // set the bit to 'c'
+  /* set the bit to 'c' */
   const byte updated_value = masked_value | (c << bit_index);
 
-  // update the byte index
+  /* update the byte index */
   output[byte_index] = updated_value;
 }
 
@@ -111,38 +111,26 @@ size_t encode_char(byte *const output_encrypted, const char c, size_t bit_positi
   static const byte GROUP_OFFSETS[4] = {0, 2, 6, 14};
 
   const byte group = get_char_cipher_group(c);
-
   const byte group_index = (c - 'a') - GROUP_OFFSETS[(size_t) group];
 
-  /* printf("c: %c -> %d :(%d - %d) %d, b= ", c, group, c - 'a', GROUP_OFFSETS[(size_t) group], group_index); */
-  /* print_bits(&group_index, 0, 8); */
-  /* printf(", group_bytes: "); */
-  /* print_bits(&group, 0, 8); */
-  /* printf(", %d%d", get_bit(group, 1), get_bit(group, 0)); */
-  /* printf("\n"); */
+  byte i = 0; /* volper please why do you make these assignments in ANSI-C */
 
-  // write the group bits (2)
+  /* write the group bits (2) */
   set_bit(output_encrypted, bit_position++, get_bit(group, 0));
   set_bit(output_encrypted, bit_position++, get_bit(group, 1));
 
-  // 0000
-
-  // 0 - 1 - 1
-  // 1 - 2 - 2
-  // 2 - 3 - 3
-  // 3 - 4 - 4
-  for (byte i = 0; i <= group; i++) {
+  for (; i <= group; i++) {
     set_bit(output_encrypted, bit_position++, get_bit(group_index, i));
   }
 
   return 3 + group;
 }
 
-void encode(const char *const plaintext, byte *const encrypted_text, int *const num_bits_used) {
+void encode(const char *plaintext, byte *const encrypted_text, int *const num_bits_used) {
   size_t bit_position = 0;
 
-  for (size_t i = 0; plaintext[i] != '\0'; i++) {
-    bit_position += encode_char(encrypted_text, plaintext[i], bit_position);
+  for (; *plaintext; plaintext++) {
+    bit_position += encode_char(encrypted_text, *plaintext, bit_position);
   }
 
   *num_bits_used = (int) bit_position;
